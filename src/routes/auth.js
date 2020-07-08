@@ -18,7 +18,6 @@ router.post('/', (req, res) => {
 
 router.post('/confirmation', (req, res) => {
   const token = req.body.token;
-  console.log('test98');
   user
     .findOneAndUpdate(
       { confirmationToken: token },
