@@ -1,8 +1,7 @@
 import express from 'express';
-import User from '../models/user';
+import User from '../models/UserModel';
 import parseErrors from '../utils/parseErrors';
 import { sendConfirmationEmail } from '../mailer';
-import user from '../models/user';
 
 const router = express.Router();
 
@@ -13,11 +12,11 @@ router.post('/', (req, res) => {
   user.setConfirmationToken();
   user
     .save()
-    .then(userRecord => {
+    .then((userRecord) => {
       sendConfirmationEmail(userRecord);
       res.json({ user: userRecord.toAuthJSON() });
     })
-    .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }));
+    .catch((err) => res.status(400).json({ errors: parseErrors(err.errors) }));
 });
 
 export default router;

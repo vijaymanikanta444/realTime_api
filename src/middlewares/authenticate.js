@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/UserModel';
 
 export default (req, res, next) => {
   const header = req.headers.authorization;
@@ -11,8 +12,10 @@ export default (req, res, next) => {
       if (err) {
         res.status(401).json({ errors: { global: 'invalid token' } });
       } else {
-        req.userEmail = decoded.email;
-        next();
+        User.findOne({ email: decoded.email }).then((user) => {
+          req.currentUser = user;
+          next();
+        });
       }
     });
   } else {
